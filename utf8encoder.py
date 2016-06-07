@@ -18,15 +18,7 @@ def fill8(b,code):
             b[i] = int(_bnry[k],2)
             k+=1
         i-=1
-    """
-    with open('abc.txt','wb')as f2:
-        f2.write(chr(int(str(b),16)))
-    f2.close()
-    """
-    #f2.write(struct.pack('>c',chr(int(str(b),16))))
     f2.write(chr(int(str(b),16)))
-
-    #f2.write(bytearray(int(str(b),16)))
 
 #fill 2 octents
 def fill16(b,c,code):
@@ -53,25 +45,15 @@ def fill16(b,c,code):
             b[i] = int(_bnry[k],2)
             k+=1
         i-=1
-    """
-    with open('abc.txt','wb')as f2:
-        f2.write(chr(int(str(b),16)))
-        f2.write(chr(int(str(c),16)))
-    f2.close()
-    """
 
     f2.write(chr(int(str(b),16)))
     f2.write(chr(int(str(c),16)))
-    #f2.write(bytearray(int(str(b),16)))
-    #f2.write(bytearray(int(str(c),16)))
-    #f2.write(struct.pack('>c',chr(int(str(c),16))))
-    #print b,c
+    
 #fill all three octents
 def fill24(b,c,d,code):
     _bnry = bin(int(code,16))
     _bnry = list(_bnry)
     _bnry.reverse()
-    #print _bnry
     i=7
     k=0
     flag=0
@@ -102,25 +84,10 @@ def fill24(b,c,d,code):
             b[i] = int(_bnry[k],2)
             k+=1
         i-=1
-    """
-    with open('abc.txt','wb')as f2:
-        f2.write(chr(int(str(b),16)))
-        f2.write(chr(int(str(c),16)))
-        f2.write(chr(int(str(d),16)))
-    f2.close()
-    """
-
-    #f2.write(struct.pack('>3c',chr(int(str(b),16)),chr(int(str(c),16)),chr(int(str(d),16))))
+    
     f2.write(chr(int(str(b),16)))
     f2.write(chr(int(str(c),16)))
     f2.write(chr(int(str(d),16)))
-
-    #f2.write(bytearray(int(str(b),16)))
-    #f2.write(bytearray(int(str(c),16)))
-    #f2.write(bytearray(int(str(d),16)))
-    #f2.write(struct.pack('>c',chr(int(str(c),16))))
-    #f2.write(struct.pack('>c',chr(int(str(d),16))))
-
 
 
 _filename = sys.argv[1]
@@ -136,10 +103,10 @@ with open(_filename,'rb')as f:
                     part2='0'+part2
                 utf16 = hex(ord(a[0]))+ part2
                 #print utf16
+                #checking which group it belongs to
                 if int(utf16,16) >= int('0x0000',16) and int(utf16,16) <= int('0x007F',16):
                     b = BitArray(8)
                     b[0] = 0
-                    #print "abc"
                     fill8(b,utf16)
 
                 elif int(utf16,16) >= int('0x0080',16) and int(utf16,16) <= int('0x07FF',16):
@@ -147,7 +114,6 @@ with open(_filename,'rb')as f:
                     c = BitArray(8)
                     b[0] = b[1] = c[0] = 1
                     b[2] = c[1] = 0
-                    #print "bcd"
                     fill16(b,c,utf16)
 
                 elif int(utf16,16) >= int('0x0800',16) and int(utf16,16) <= int('0xFFFF',16):
@@ -156,17 +122,7 @@ with open(_filename,'rb')as f:
                     d = BitArray(8)
                     b[0] = b[1] = b[2] = c[0] = d[0] = 1
                     b[3] = c[1] = d[1] = 0
-
-
-                    #print "efg"
                     fill24(b,c,d,utf16)
-
-
-
-
-
-
-                #print utf16
                 _byte = f.read(2)
 
 f2.close()
